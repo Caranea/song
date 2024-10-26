@@ -1,0 +1,74 @@
+<div class="px-4 sm:px-6 lg:px-8 max-h-[50vh]  overflow-y-scroll h-full flex flex-col justify-stretch">
+    <div class="sm:flex sm:items-center mb-6">
+      <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6 text-gray-900">
+          Top Artists of all Time
+        </h1>
+        <p class="mt-2 text-sm text-gray-700">
+          Who is your absolute #1?
+        </p>
+      </div>
+    </div>
+    <div class="canvas-container h-full">
+        <div class="mt-4 flow-root">
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <table class="min-w-full divide-y divide-gray-300">
+                  <thead>
+                    <tr>
+                      <th
+                        scope="col"
+                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                      >
+                        Artist
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Songs
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Listens
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200">
+                    @if (!(topArtists$ | async)?.length){
+                      <tr>
+                        <td
+                          class="whitespace-nowrap py-2 pl-4 pr-3 text-xs lg:text-sm font-medium text-gray-900 sm:pl-0"
+                          colspan="4"
+                        >
+                          Preparing data...
+                        </td>
+                      }
+                    @for (artist of topArtists$ | async ; track artist){
+                    <tr>
+                      <td
+                        class="whitespace-nowrap max-w-[5rem] py-2 pl-4 pr-3 text-xs lg:text-sm font-medium text-gray-900 sm:pl-0  overflow-ellipsis overflow-hidden"
+                      >
+                        {{ artist.artist }}
+                      </td>
+                      <td
+                        class="whitespace-nowrap px-3 py-4 text-xs lg:text-sm text-gray-500 overflow-ellipsis overflow-hidden"
+                      >
+                         {{ artist.songs}}
+                      </td>
+                      <td
+                        class="whitespace-nowrap px-3 py-4 text-xs lg:text-sm text-gray-500  overflow-ellipsis overflow-hidden"
+                      >
+                        {{ artist.cumulativeListens}}
+                    </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+  

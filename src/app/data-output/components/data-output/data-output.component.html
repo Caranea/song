@@ -1,0 +1,43 @@
+<div class="bg-white py-24 sm:py-32">
+    <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+      <h2 class="text-base/7 font-semibold text-indigo-600">The playlist of your life</h2>
+      <p class="mt-2 max-w-lg text-pretty text-4xl font-medium tracking-tight text-gray-950 sm:text-5xl">Your music and memories throughout the years, all in one place.</p>
+      <div class="mt-10 grid grid-cols-1 gap-4 sm:mt-16 lg:grid-cols-6 lg:grid-rows-2">
+        <div class="relative lg:col-span-6">
+          <div class="absolute inset-px rounded-lg bg-white"></div>
+          <div class="relative flex h-full flex-col overflow-hidden">
+            <app-top-list class="mt-6"/>
+          </div>
+          <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
+        </div>
+        <div class="relative lg:col-span-4">
+          <div class="absolute inset-px rounded-lg bg-white"></div>
+          <div class="relative flex h-full flex-col overflow-hidden rounded-lg">
+           <app-top-artists class="mt-6 h-full"/>
+          </div>
+          <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
+        </div>
+        <div class="relative lg:col-span-2">
+          <div class="absolute inset-px rounded-lg bg-white "></div>
+          <div class="relative flex h-full flex-col overflow-hidden">
+          <app-top-artist-table class="mt-6 h-full" />
+          </div>
+          <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
+        </div>
+        <div class="relative lg:col-span-2">
+          <div class="absolute inset-px rounded-lg bg-white"></div>
+          <div class="relative flex h-full flex-col overflow-hidden">
+            <app-nostalgic-throwbacks />
+          </div>
+          <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
+        </div>
+        <div class="relative lg:col-span-4">
+          <div class="absolute inset-px rounded-lg bg-white"></div>
+          <div class="relative flex h-full flex-col overflow-hidden rounded-lg">
+           <app-total-time class="mt-6 h-full"/>
+          </div>
+          <div class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"></div>
+        </div>
+      </div>
+    </div>
+  </div>

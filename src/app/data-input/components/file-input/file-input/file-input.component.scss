@@ -1,0 +1,32 @@
+::ng-deep {
+  .carousel-container {
+    @apply overflow-hidden;
+    position: unset !important;
+  }
+  .slides-container {
+    @apply h-[105%];
+  }
+  .banner-container {
+    position: absolute;
+    width: 100%;
+    top:75%;
+    .btn-container {
+      width: 100%;
+      display: flex;
+      align-content: unset;
+      justify-content: space-between;
+
+      .next, .prev {
+       @apply rounded bg-indigo-400 px-2 py-1 text-xs font-semibold shadow-sm hover:bg-indigo-200;
+      }
+
+      .prev {
+        margin-left: 2.4rem;
+      }
+      
+      .next {
+        margin-right: 2.4rem;
+      }
+    }
+  }
+}

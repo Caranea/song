@@ -1,0 +1,224 @@
+<div class="bg-gray-50 py-24 sm:py-32">
+  <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+    <h2 class="text-center text-base/7 font-semibold text-indigo-600">
+      The playlist of your life
+    </h2>
+    <p
+      class="mx-auto mt-2 max-w-lg text-pretty text-center text-4xl font-medium tracking-tight text-gray-950 sm:text-5xl"
+    >
+      Your music and memories throughout the years, all in one place.
+    </p>
+
+    <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
+      <div class="relative lg:row-span-2">
+        <div
+          class="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"
+        ></div>
+        <div
+          class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] lg:rounded-l-[calc(2rem+1px)]"
+        >
+          <div class="px-8 pb-3 pt-8 sm:px-10 sm:pb-0 sm:pt-10">
+            <p
+              class="mt-2 text-lg/7 font-medium tracking-tight text-gray-950 max-lg:text-center"
+            >
+              How to request a
+              <a
+                target="_blank"
+                href="https://takeout.google.com/settings/takeout"
+                >Google Takeout</a
+              >
+              export?
+            </p>
+            <ol
+              class="mt-2 mb-8 max-w-lg text-sm/6 text-gray-600 max-lg:text-center list-decimal list-inside"
+            >
+              <li>
+                Make sure you enabled saving
+                <a
+                  class="underline"
+                  target="_blank"
+                  href="https://myactivity.google.com/activitycontrols?settings=youtube&utm_source=my-activity"
+                  >Youtube history</a
+                >.
+              </li>
+              <li>
+                Go to the
+                <a
+                  class="underline"
+                  target="_blank"
+                  href="https://takeout.google.com/settings/takeout"
+                  >Google Takeout</a
+                >
+                website. Click on "Deselect all".
+              </li>
+              <li>From Youtube data deselect everything but history data.</li>
+              <li>From formats options select "JSON" for history format.</li>
+              <li>
+                If needed, unzip the files and find the file with watch history
+                from the Takeout folder.
+              </li>
+            </ol>
+          </div>
+          <div
+            class="max-h-[22.5rem] min-h-[18rem] w-full grow [container-type:inline-size] max-lg:mx-auto max-lg:max-w-sm"
+          >
+            <carousel
+              class="inline-flex h-full"
+              [slideToShow]="1"
+              [counter]="false"
+              [dots]="false"
+            >
+              <div class="carousel-slide min-w-[300px]">
+                <div
+                  class="h-full inset-x-10 bottom-0 top-10 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl"
+                >
+                  <img
+                    class="size-full object-cover object-top"
+                    src="/takeout.google.com_settings_takeout_pli=1(iPhone SE) (1).png"
+                    alt=""
+                  />
+                </div>
+              </div>
+              <div class="carousel-slide">
+                <div
+                  class="h-full inset-x-10 bottom-0 top-10 overflow-hidden rounded-t-[12cqw] border-x-[3cqw] border-t-[3cqw] border-gray-700 bg-gray-900 shadow-2xl"
+                >
+                  <img
+                    class="size-full object-cover object-top"
+                    src="/json.png"
+                    alt=""
+                  />
+                </div>
+              </div>
+            </carousel>
+          </div>
+        </div>
+        <div
+          class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 lg:rounded-l-[2rem]"
+        ></div>
+      </div>
+      <div class="relative max-lg:row-start-1">
+        <div
+          class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem]"
+        ></div>
+        <div
+          class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]"
+        >
+          <div class="px-8 pt-8 sm:px-10 sm:pt-10">
+            <form>
+              @if (!fileName) {
+              <p
+                class="mt-2 text-lg/7 font-medium tracking-tight text-gray-950 max-lg:text-center"
+              >
+                Upload the JSON file with your Youtube watch history data
+              </p>
+              <label
+                for="uploadFile"
+                class="my-6 bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-11 mb-2 fill-gray-500"
+                  viewBox="0 0 32 32"
+                >
+                  <path
+                    d="M23.75 11.044a7.99 7.99 0 0 0-15.5-.009A8 8 0 0 0 9 27h3a1 1 0 0 0 0-2H9a6 6 0 0 1-.035-12 1.038 1.038 0 0 0 1.1-.854 5.991 5.991 0 0 1 11.862 0A1.08 1.08 0 0 0 23 13a6 6 0 0 1 0 12h-3a1 1 0 0 0 0 2h3a8 8 0 0 0 .75-15.956z"
+                    data-original="#000000"
+                  />
+                  <path
+                    d="M20.293 19.707a1 1 0 0 0 1.414-1.414l-5-5a1 1 0 0 0-1.414 0l-5 5a1 1 0 0 0 1.414 1.414L15 16.414V29a1 1 0 0 0 2 0V16.414z"
+                    data-original="#000000"
+                  />
+                </svg>
+                Upload file
+
+                <input
+                  type="file"
+                  accept="application/json"
+                  id="uploadFile"
+                  class="hidden"
+                  (change)="onFileSelected($event)"
+                  #fileUpload
+                />
+                <p class="text-xs font-medium text-gray-400 mt-2">
+                  Only JSON files are allowed.
+                </p> </label
+              >} @else {
+              <p
+                class="text-lg/7 font-medium tracking-tight text-gray-950 max-lg:text-center mb-4"
+              >
+                @if (preparingData$ | async) {
+                <span class="animate-pulse">Preparing data...</span>
+                } @else {
+                {{ "Analyzing file " + fileName + "..." }}
+                {{ progress$ | async }}% }
+              </p>
+              }
+            </form>
+          </div>
+        </div>
+        <div
+          class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-t-[2rem]"
+        ></div>
+      </div>
+      <div class="relative max-lg:row-start-3 lg:col-start-2 lg:row-start-2">
+        <div class="absolute inset-px rounded-lg bg-white"></div>
+        <div
+          class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)]"
+        >
+          <div class="px-8 pt-8 sm:px-10 sm:pt-10">
+            <p
+              class="mt-2 text-lg/7 font-medium tracking-tight text-gray-950 max-lg:text-center"
+            >
+              Security
+            </p>
+            <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
+              Your watch history is processed locally and never leaves your
+              device. You can checkout the source code of the project on Github.
+            </p>
+          </div>
+          <div
+            class="flex flex-1 items-center [container-type:inline-size] max-lg:py-6 lg:pb-2"
+          >
+            <img
+              class="h-[min(152px,40cqw)] object-cover object-center"
+              src="https://tailwindui.com/plus/img/component-images/bento-03-security.png"
+              alt=""
+            />
+          </div>
+        </div>
+        <div
+          class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5"
+        ></div>
+      </div>
+      <div class="relative lg:row-span-2">
+        <div
+          class="absolute inset-px rounded-lg bg-white max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"
+        ></div>
+        <div
+          class="relative flex h-full flex-col overflow-hidden rounded-[calc(theme(borderRadius.lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]"
+        >
+          <div class="px-8 pb-3 pt-8 sm:px-10 sm:pb-0 sm:pt-10">
+            <p
+              class="mt-2 text-lg/7 font-medium tracking-tight text-gray-950 max-lg:text-center"
+            >
+              Insights bringing back memories
+            </p>
+            <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
+              Do you remember which song you listened to the most in 2019? Or
+              how many hours of music you listened to in 2020? How did your
+              interest in your favorite artist change over time? Find out with
+              the help of our insights.
+            </p>
+          </div>
+          <div class=" ">
+            <img class="" src="/data.png" alt="" />
+          </div>
+        </div>
+        <div
+          class="pointer-events-none absolute inset-px rounded-lg shadow ring-1 ring-black/5 max-lg:rounded-b-[2rem] lg:rounded-r-[2rem]"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

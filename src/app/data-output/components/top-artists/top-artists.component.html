@@ -1,0 +1,23 @@
+<div class="px-4 sm:px-6 lg:px-8 h-[50vh] flex flex-col justify-stretch">
+  <div class="sm:flex sm:items-center mb-6">
+    <div class="sm:flex-auto">
+      <h1 class="text-base font-semibold leading-6 text-gray-900">
+        Top Artists - Year by Year
+      </h1>
+      <p class="mt-2 text-sm text-gray-700">
+        Click on artist's name to highlight their popularity over the years.
+      </p>
+    </div>
+  </div>
+  <div class="canvas-container h-full">
+    <canvas
+    class="mb-6"
+    baseChart
+    [type]="'line'"
+    [data]="lineChartData"
+    [options]="lineChartOptions"
+    [legend]="lineChartLegend"
+  >
+  </canvas>
+  </div>
+</div>
