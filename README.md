@@ -1,6 +1,32 @@
-# Song
+# [A Song from the Past](https://songfromthepast.netlify.app/)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.1.
+This application processes and analyzes your YouTube watch history, rendering it easy to understand.
+
+Example output:
+
+![example output](https://songfromthepast.netlify.app/data.png)
+
+# Data safety and privacy
+
+This application processes data on the user's device and never sends history data to any servers.
+
+# Features
+
+## Top Songs
+
+This component displays a list of songs for a chosen period sorted by cumulative listens. 
+
+## Top Artists 
+
+This component displays chart data illustrating your interest in top artists (measured by cumulative listens) over time. 
+
+## Top Artists - table
+
+This component displays your favorite artists, the number of their songs you listened to with their cumulative listens
+
+## Nostalgic throwbacks
+
+This component looks for the top songs from a chosen time period and finds out which ones you haven't listened to for a long time. 
 
 ## Development server
 
