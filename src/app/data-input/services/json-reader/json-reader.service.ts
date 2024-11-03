@@ -10,8 +10,6 @@ import { IndexedDbService } from '../../../shared/indexedDB/services/db-service/
 })
 export class JsonHandlerService {
   public progress$ = new BehaviorSubject(0);
-  public preparingData$ = new BehaviorSubject(false);
-
   private youtubeApiService = inject(V3ApiService);
   private indexedDBService = inject(IndexedDbService);
 
@@ -102,6 +100,7 @@ export class JsonHandlerService {
   public reduceHistoryEntriesAndFindEarliestDate(entries: HistoryEntry[]): ReducedHistoryEntry[] {
     const reducedEntries: ReducedHistoryEntry[] = [];
     let date = new Date();
+
     for (let i = 0; i < entries.length; i++) {
       if (new Date(entries[i].time) < date) {
         date = new Date(entries[i].time);
@@ -129,8 +128,6 @@ export class JsonHandlerService {
       const entriesMetadata: Partial<MetadataEntry>[] = [];
       const observables: Observable<any>[] = [];
       let batchIndex = 1;
-
-      this.preparingData$.next(true);
       for (let i = 0; i < entries.length; i += 50) {
         const videosIds = entries.slice(i, i + 50).map(entry => {
           return entry.id;
@@ -138,8 +135,6 @@ export class JsonHandlerService {
         const observable = this.getVideosMetadata(videosIds);
         observables.push(observable);
       }
-
-      this.preparingData$.next(false);
 
       concat(...observables).subscribe((res) => {
         for (let entryMetadata of res.items.filter((item: { snippet: { categoryId: string; }; }) => item.snippet?.categoryId === '10')) {
@@ -150,7 +145,8 @@ export class JsonHandlerService {
           });
         }
 
-        this.progress$.next(batchIndex / observables.length * 100);
+        this.progress$.next((batchIndex / observables.length * 100));
+
         batchIndex++
         if (batchIndex > observables.length) {
           this.indexedDBService.bulkAddEntries(entriesMetadata.map(entry => this.removeArtistFromTitle(entry))

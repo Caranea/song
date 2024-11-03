@@ -145,12 +145,16 @@
                 </p> </label
               >} @else {
               <p
-                class="text-lg/7 font-medium tracking-tight text-gray-950 max-lg:text-center mb-4"
+                class="text-lg/7 font-medium tracking-tight text-gray-950 max-lg:text-center mb-12"
               >
-                @if (preparingData$ | async) {
-                <span class="animate-pulse">Preparing data...</span>
+                @if (fileName && (progress$ | async) === 0) {
+                {{
+                  "Processing data in " +
+                    fileName +
+                    ". This might take up to 10 minutes, depending on your device and the size of the file..."
+                }}
                 } @else {
-                {{ "Analyzing file " + fileName + "..." }}
+                {{ "Analyzing data from " + fileName + "..." }}
                 {{ progress$ | async }}% }
               </p>
               }
@@ -174,7 +178,14 @@
             </p>
             <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
               Your watch history is processed locally and never leaves your
-              device. You can checkout the source code of the project on Github.
+              device. You can checkout the source code of the project on
+              <a
+                class="underline"
+                target="_blank"
+                href="https://github.com/Caranea/song"
+              >
+                Github.
+              </a>
             </p>
           </div>
           <div

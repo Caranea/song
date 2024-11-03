@@ -17,7 +17,6 @@ export class FileInputComponent {
 
   public fileName = '';
   public progress$ = this.JsonHandlerService.progress$.pipe(map((progress) => Math.round(progress)));
-  public preparingData$ = this.JsonHandlerService.preparingData$;
 
   constructor() {
     combineLatest([
@@ -29,7 +28,6 @@ export class FileInputComponent {
       }
     })
   }
-
 
   onFileSelected(event: Event) {
     const fileInput = event.target as HTMLInputElement;
