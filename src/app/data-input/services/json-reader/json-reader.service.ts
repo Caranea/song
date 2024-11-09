@@ -24,6 +24,24 @@ export class JsonHandlerService {
     return years;
   }));
 
+  constructor() {
+    console.log('a')
+
+    if (typeof Worker !== 'undefined') {
+      // Create a new
+      const worker = new Worker(new URL('../../webworkers/file-processor.worker', import.meta.url));
+      console.log(worker)
+      worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+
+      worker.postMessage('hello');
+    } else {
+      // Web workers are not supported in this environment.
+      // You should add a fallback so that your program still executes correctly.
+    }
+  }
+
   public topArtists$ = this.indexedDBService.allEntries$.pipe(map((entries) => {
     const topArtists: {
       artist: string;
@@ -106,7 +124,7 @@ export class JsonHandlerService {
         date = new Date(entries[i].time);
       }
 
-      const reducedEntry = reducedEntries.find(reducedEntry => reducedEntry.titleUrl === entries[i].titleUrl);
+      const reducedEntry = reducedEntries.find(reducedEntry => reducedEntry.titleUrl.split('watch?v=')[1] === entries[i].titleUrl.split('watch?v=')[1]);
       if (reducedEntry) {
         reducedEntry.occurrenceCount++;
         reducedEntry.watchDatestamps.push(entries[i].time);
@@ -135,9 +153,9 @@ export class JsonHandlerService {
         const observable = this.getVideosMetadata(videosIds);
         observables.push(observable);
       }
-
       concat(...observables).subscribe((res) => {
-        for (let entryMetadata of res.items.filter((item: { snippet: { categoryId: string; }; }) => item.snippet?.categoryId === '10')) {
+        const musicEntries = res.items.filter((item: any) => item.snippet.categoryId === '10');
+        for (let entryMetadata of musicEntries) {
           const entry = entries.find(entry => entry.id === entryMetadata.id);
           entriesMetadata.push({
             ...entry,
@@ -189,16 +207,16 @@ export class JsonHandlerService {
   private removeArtistFromTitle(entry: Partial<MetadataEntry>): Partial<MetadataEntry> {
     const artist = entry.metadata?.snippet?.tags?.[0];
     const title = entry.metadata?.snippet?.title;
-    if (entry.metadata && title && title.includes(artist + ' - ')) {
-      entry.metadata.snippet.title = title.replace(artist + ' - ', '');
+    if (title && title.includes(artist + ' - ')) {
+      entry!.metadata!.snippet!.title = title.replace(artist + ' - ', '');
     }
     return entry;
   }
 
   private removeParenthesesFromTitle(entry: Partial<MetadataEntry>): Partial<MetadataEntry> {
     const title = entry.metadata?.snippet?.title;
-    if (entry.metadata && title && title.includes('(')) {
-      entry.metadata.snippet.title = title.replace(/\([^()]*\)/, '');
+    if (title && title.includes('(')) {
+      entry!.metadata!.snippet!.title = title.replace(/\([^()]*\)/, '');
     }
     return entry;
   }
