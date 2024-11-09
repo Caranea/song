@@ -9,17 +9,17 @@ export interface MetadataEntry {
     time: Date | undefined;
     products: string[];
     activityControls: string[];
-    id: string;
+    id?: string;
     occurrenceCount: number;
     watchDatestamps: Date[] | undefined;
-    metadata: {
+    metadata?: {
         kind: string;
         etag: string;
         id: string;
-        snippet: {
+        snippet?: {
             publishedAt: string;
             channelId: string;
-            title: string;
+            title?: string;
             description: string;
             thumbnails: {
                 default: {
@@ -49,7 +49,7 @@ export interface MetadataEntry {
                 };
             };
             channelTitle: string;
-            tags: string[];
+            tags: string[] | never[] | undefined;
             categoryId: string;
             liveBroadcastContent: string;
             localized: {

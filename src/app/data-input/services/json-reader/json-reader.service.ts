@@ -4,6 +4,7 @@ import { V3ApiService } from '../../../shared/youtube-api/services/v3-api/v3-api
 import { BehaviorSubject, Observable, concat, map } from 'rxjs';
 import { MetadataEntry } from '../../../shared/interfaces/metadata-entry.interface';
 import { IndexedDbService } from '../../../shared/indexedDB/services/db-service/indexed-db.service';
+import { getBatchedIds, reduceHistoryEntriesAndFindEarliestDate } from '../../helpers/file-processor';
 
 @Injectable({
   providedIn: 'root'
@@ -23,24 +24,6 @@ export class JsonHandlerService {
     }
     return years;
   }));
-
-  constructor() {
-    console.log('a')
-
-    if (typeof Worker !== 'undefined') {
-      // Create a new
-      const worker = new Worker(new URL('../../webworkers/file-processor.worker', import.meta.url));
-      console.log(worker)
-      worker.onmessage = ({ data }) => {
-        console.log(`page got message: ${data}`);
-      };
-
-      worker.postMessage('hello');
-    } else {
-      // Web workers are not supported in this environment.
-      // You should add a fallback so that your program still executes correctly.
-    }
-  }
 
   public topArtists$ = this.indexedDBService.allEntries$.pipe(map((entries) => {
     const topArtists: {
@@ -115,63 +98,86 @@ export class JsonHandlerService {
     });
   }
 
-  public reduceHistoryEntriesAndFindEarliestDate(entries: HistoryEntry[]): ReducedHistoryEntry[] {
-    const reducedEntries: ReducedHistoryEntry[] = [];
-    let date = new Date();
+  public processFile(entries: HistoryEntry[]): ReducedHistoryEntry[] | void {
+    if (typeof Worker !== 'undefined') {
+      const worker = new Worker(new URL('../../webworkers/entry-reducer.worker', import.meta.url));
 
-    for (let i = 0; i < entries.length; i++) {
-      if (new Date(entries[i].time) < date) {
-        date = new Date(entries[i].time);
-      }
+      worker.onmessage = ({ data }) => {
+        this.indexedDBService.setEarliestDate(data[1]).subscribe();
+        this.batchHandleEntries(data[0]);
+      };
 
-      const reducedEntry = reducedEntries.find(reducedEntry => reducedEntry.titleUrl.split('watch?v=')[1] === entries[i].titleUrl.split('watch?v=')[1]);
-      if (reducedEntry) {
-        reducedEntry.occurrenceCount++;
-        reducedEntry.watchDatestamps.push(entries[i].time);
-      } else {
-        reducedEntries.push({
-          ...entries[i],
-          id: entries[i].titleUrl.split('?v=')[1],
-          occurrenceCount: 1,
-          watchDatestamps: [entries[i].time],
-        });
-      }
+      worker.postMessage(entries);
+    } else {
+      let [reducedEntries, date] = reduceHistoryEntriesAndFindEarliestDate(entries);
+
+      this.indexedDBService.setEarliestDate(date).subscribe();
+      this.batchHandleEntries(reducedEntries);
     }
-    this.indexedDBService.setEarliestDate(date).subscribe();
-    return reducedEntries.sort((a, b) => b.occurrenceCount - a.occurrenceCount);
   }
 
   public batchHandleEntries(entries: ReducedHistoryEntry[]): void {
-    this.indexedDBService.clearAllEntries().subscribe(() => {
-      const entriesMetadata: Partial<MetadataEntry>[] = [];
-      const observables: Observable<any>[] = [];
-      let batchIndex = 1;
-      for (let i = 0; i < entries.length; i += 50) {
-        const videosIds = entries.slice(i, i + 50).map(entry => {
-          return entry.id;
-        });
-        const observable = this.getVideosMetadata(videosIds);
-        observables.push(observable);
-      }
-      concat(...observables).subscribe((res) => {
-        const musicEntries = res.items.filter((item: any) => item.snippet.categoryId === '10');
-        for (let entryMetadata of musicEntries) {
-          const entry = entries.find(entry => entry.id === entryMetadata.id);
-          entriesMetadata.push({
-            ...entry,
-            metadata: entryMetadata,
+    if (typeof Worker !== 'undefined') {
+      const worker = new Worker(new URL('../../webworkers/request-batches-calculator.worker', import.meta.url));
+
+      worker.onmessage = ({ data }) => {
+        this.indexedDBService.clearAllEntries().subscribe(() => {
+          const entriesMetadata: Partial<MetadataEntry>[] = [];
+          const observables: Observable<any>[] = data.map((batch: string[]) => {
+            return this.getVideosMetadata(batch);
           });
-        }
+          let batchIndex = 1;
 
-        this.progress$.next((batchIndex / observables.length * 100));
+          concat(...observables).subscribe((res) => {
+            const musicEntries = res.items.filter((item: any) => item.snippet.categoryId === '10');
+            for (let entryMetadata of musicEntries) {
+              const entry = entries.find(entry => entry.id === entryMetadata.id);
+              entriesMetadata.push({
+                ...entry,
+                metadata: entryMetadata,
+              });
+            }
 
-        batchIndex++
-        if (batchIndex > observables.length) {
-          this.indexedDBService.bulkAddEntries(entriesMetadata.map(entry => this.removeArtistFromTitle(entry))
-            .map(entry => this.removeParenthesesFromTitle(entry))).subscribe()
-        }
-      })
-    });
+            this.progress$.next((batchIndex / observables.length * 100));
+
+            batchIndex++
+            if (batchIndex > observables.length) {
+              this.indexedDBService.bulkAddEntries(entriesMetadata.map(entry => this.removeArtistFromTitle(entry))
+                .map(entry => this.removeParenthesesFromTitle(entry))).subscribe()
+            }
+          })
+        });
+      };
+
+      worker.postMessage(entries);
+    } else {
+      this.indexedDBService.clearAllEntries().subscribe(() => {
+        const entriesMetadata: Partial<MetadataEntry>[] = [];
+        const observables: Observable<any>[] = getBatchedIds(entries).map((batch) => {
+          return this.getVideosMetadata(batch);
+        });
+        let batchIndex = 1;
+
+        concat(...observables).subscribe((res) => {
+          const musicEntries = res.items.filter((item: any) => item.snippet.categoryId === '10');
+          for (let entryMetadata of musicEntries) {
+            const entry = entries.find(entry => entry.id === entryMetadata.id);
+            entriesMetadata.push({
+              ...entry,
+              metadata: entryMetadata,
+            });
+          }
+
+          this.progress$.next((batchIndex / observables.length * 100));
+
+          batchIndex++
+          if (batchIndex > observables.length) {
+            this.indexedDBService.bulkAddEntries(entriesMetadata.map(entry => this.removeArtistFromTitle(entry))
+              .map(entry => this.removeParenthesesFromTitle(entry))).subscribe()
+          }
+        })
+      });
+    }
   }
 
   public getEntriesByYear(year: number): Observable<MetadataEntry[]> {

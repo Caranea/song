@@ -9,12 +9,8 @@
       </p>
     </div>
     <div class="sm:ml-2 mt-2 sm:mt-0">
-      <select
-        (change)="filterBy($event)"
-        id="location"
-        name="location"
-        class="block min-w-[85px] w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-      >
+      <select (change)="filterBy($event)" id="location" name="location"
+        class="block min-w-[85px] w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
         @for (year of years$ | async; track year){
         <option>{{ year }}</option>
         }
@@ -22,83 +18,51 @@
     </div>
     <div></div>
   </div>
-  @if (throwbacks[currentThrowback]?.id){
-  <iframe class="w-full h-96"
-    [src]="
+  @if (throwbacks[currentThrowback] && throwbacks[currentThrowback].id){
+  <iframe class="w-full h-96" [src]="
       photoURL(
         'https://www.youtube.com/embed/' + throwbacks[currentThrowback].id
       )
-    "
-  >
+    ">
   </iframe>
   }
   <div class="mt-6 flex justify-center items-center">
-    <button
-      class="p-3 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-      (click)="previousThrowback()"
-    >
-      <svg
-        width="64px"
-        height="64px"
-        viewBox="0 0 24 24"
-        class="w-4 h-4 text-gray-600"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        transform="matrix(-1, 0, 0, 1, 0, 0)"
-      >
+    <button class="p-3 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" (click)="previousThrowback()">
+      <svg width="64px" height="64px" viewBox="0 0 24 24" class="w-4 h-4 text-gray-600" fill="none"
+        xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier">
           <path
             d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
-            fill="#000000"
-          ></path>
+            fill="#000000"></path>
           <path
             d="M22.75 5C22.75 4.58579 22.4142 4.25 22 4.25C21.5858 4.25 21.25 4.58579 21.25 5V19C21.25 19.4142 21.5858 19.75 22 19.75C22.4142 19.75 22.75 19.4142 22.75 19V5Z"
-            fill="#000000"
-          ></path>
+            fill="#000000"></path>
         </g>
       </svg>
     </button>
     <div class="mx-4">
-        <h3 class="text-xl font-semibold text-center mt-2">
-            {{ throwbacks[currentThrowback]?.metadata?.snippet?.title }}
-          </h3>
-          <p class="text-gray-600 text-sm text-center">
-            {{throwbacks[currentThrowback]?.metadata?.snippet?.tags?.[0]}}
-          </p>
+      @if ( throwbacks[currentThrowback]){
+      <h3 class="text-xl font-semibold text-center mt-2">
+        {{ throwbacks[currentThrowback].metadata?.snippet?.title }}
+      </h3>
+      <p class="text-gray-600 text-sm text-center">
+        {{throwbacks[currentThrowback].metadata?.snippet?.tags?.[0]}}
+      </p>}
     </div>
-    <button
-      class="p-3 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
-      (click)="nextThrowback()"
-    >
-      <svg
-        width="64px"
-        height="64px"
-        viewBox="0 0 24 24"
-        class="w-4 h-4 text-gray-600"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+    <button class="p-3 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none" (click)="nextThrowback()">
+      <svg width="64px" height="64px" viewBox="0 0 24 24" class="w-4 h-4 text-gray-600" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier">
           <path
             d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
-            fill="#000000"
-          ></path>
+            fill="#000000"></path>
           <path
             d="M22.75 5C22.75 4.58579 22.4142 4.25 22 4.25C21.5858 4.25 21.25 4.58579 21.25 5V19C21.25 19.4142 21.5858 19.75 22 19.75C22.4142 19.75 22.75 19.4142 22.75 19V5Z"
-            fill="#000000"
-          ></path>
+            fill="#000000"></path>
         </g>
       </svg>
     </button>
