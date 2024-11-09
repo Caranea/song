@@ -41,7 +41,7 @@ export class FileInputComponent {
     if (file) {
       this.fileName = file.name;
       this.JsonHandlerService.readJsonFile(file).then((res) => {
-        res = (res as HistoryEntry[]).filter((entry: HistoryEntry) => entry.titleUrl).slice(0, 1000);
+        res = (res as HistoryEntry[]).filter((entry: HistoryEntry) => entry.titleUrl);
         this.JsonHandlerService.processFile((res as HistoryEntry[]));
       }).catch((error) => {
         alert('Error reading file: ' + error);
