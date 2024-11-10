@@ -22,7 +22,7 @@ export class IndexedDbService {
   getAllEntries() {
     return this.dbService.getAll('metadata');
   }
-  
+
   clearAllEntries() {
     return this.dbService.clear('metadata');
   }
@@ -34,4 +34,18 @@ export class IndexedDbService {
   getEarliestDate() {
     return this.dbService.getAll('earliestDate');
   }
+
+  async removeAllData() {
+    window.caches.keys().then(function (names) {
+      for (let name of names)
+        window.caches.delete(name);
+    });
+
+    const dbs = await window.indexedDB.databases()
+    dbs.forEach(db => { window.indexedDB.deleteDatabase(db.name as string) })
+
+    window.localStorage.clear();
+    window.sessionStorage.clear();
+  }
+
 }

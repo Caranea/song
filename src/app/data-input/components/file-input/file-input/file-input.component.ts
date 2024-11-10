@@ -45,6 +45,9 @@ export class FileInputComponent {
         this.JsonHandlerService.processFile((res as HistoryEntry[]));
       }).catch((error) => {
         alert('Error reading file: ' + error);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       });
     }
   }

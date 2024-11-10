@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { IndexedDbService } from '../../../shared/indexedDB/services/db-service/indexed-db.service';
 
 @Component({
   selector: 'app-data-output',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './data-output.component.scss'
 })
 export class DataOutputComponent {
+  private indexedDBService = inject(IndexedDbService);
 
+  public async clearData() {
+    await this.indexedDBService.removeAllData();
+    window.location.reload();
+  }
 }
