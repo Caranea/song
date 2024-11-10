@@ -30,25 +30,26 @@ export class FileInputComponent {
   }
 
   onFileSelected(event: Event) {
-    const fileInput = event.target as HTMLInputElement;
+    alert('This app received more traffic today than expected and used up all API quota. Please try again tomorrow.');
+    // const fileInput = event.target as HTMLInputElement;
 
-    if (!fileInput.files) {
-      return;
-    }
+    // if (!fileInput.files) {
+    //   return;
+    // }
 
-    const file: File = fileInput.files[0];
+    // const file: File = fileInput.files[0];
 
-    if (file) {
-      this.fileName = file.name;
-      this.JsonHandlerService.readJsonFile(file).then((res) => {
-        res = (res as HistoryEntry[]).filter((entry: HistoryEntry) => entry.titleUrl);
-        this.JsonHandlerService.processFile((res as HistoryEntry[]));
-      }).catch((error) => {
-        alert('Error reading file: ' + error);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      });
-    }
+    // if (file) {
+    //   this.fileName = file.name;
+    //   this.JsonHandlerService.readJsonFile(file).then((res) => {
+    //     res = (res as HistoryEntry[]).filter((entry: HistoryEntry) => entry.titleUrl);
+    //     this.JsonHandlerService.processFile((res as HistoryEntry[]));
+    //   }).catch((error) => {
+    //     alert('Error reading file: ' + error);
+    //     setTimeout(() => {
+    //       window.location.reload();
+    //     }, 1000);
+    //   });
+    // }
   }
 }
